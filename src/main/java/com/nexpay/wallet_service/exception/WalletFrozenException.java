@@ -1,5 +1,10 @@
 package com.nexpay.wallet_service.exception;
 
-public class WalletFrozenException {
+import java.util.UUID;
 
+public class WalletFrozenException extends RuntimeException {
+
+    public WalletFrozenException(UUID userId) {
+        super("wallet is frozen for user: " + userId);
+    }
 }
