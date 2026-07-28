@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Objects;
+//import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -44,7 +44,8 @@ public class WalletService {
                 .status(WalletStatus.ACTIVE)
                 .build();
 
-        Wallet saved = Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
+       // Wallet saved = Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
+            Wallet saved = walletRepository.save(wallet);
 
         log.info("wallet created for userId: {}", userId);
 
@@ -102,7 +103,8 @@ public class WalletService {
 
         // STEP 6: update wallet balance
         wallet.setBalance(balanceAfter);
-        Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
+        walletRepository.save(wallet);
+        //Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
 
         // STEP 7: create transaction record
         WalletTransaction tx = WalletTransaction.builder()
@@ -118,7 +120,8 @@ public class WalletService {
                 .status(TransactionStatus.COMPLETED)
                 .build();
 
-        WalletTransaction saved = Objects.requireNonNull(transactionRepository.save(tx), "transaction save returned null");
+        //WalletTransaction saved = Objects.requireNonNull(transactionRepository.save(tx), "transaction save returned null");
+         WalletTransaction saved = transactionRepository.save(tx);
 
         // STEP 8: write outbox event — same transaction
         OutboxEvent outbox = OutboxEvent.builder()
@@ -137,7 +140,8 @@ public class WalletService {
                 .walletId(wallet.getId())
                 .build();
 
-        Objects.requireNonNull(outboxRepository.save(outbox), "outbox save returned null");
+        //Objects.requireNonNull(outboxRepository.save(outbox), "outbox save returned null");
+        outboxRepository.save(outbox);
 
         log.info("debit successful userId: {} amount: {} balanceAfter: {}",
                 userId, req.getAmount(), balanceAfter);
@@ -179,7 +183,8 @@ public class WalletService {
 
         // STEP 5: update wallet balance
         wallet.setBalance(balanceAfter);
-        Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
+        walletRepository.save(wallet);
+        //Objects.requireNonNull(walletRepository.save(wallet), "wallet save returned null");
 
         // STEP 6: create transaction record
         WalletTransaction tx = WalletTransaction.builder()
@@ -195,7 +200,8 @@ public class WalletService {
                 .status(TransactionStatus.COMPLETED)
                 .build();
 
-        WalletTransaction saved = Objects.requireNonNull(transactionRepository.save(tx), "transaction save returned null");
+        //WalletTransaction saved = Objects.requireNonNull(transactionRepository.save(tx), "transaction save returned null");
+        WalletTransaction saved = transactionRepository.save(tx);
 
         // STEP 7: write outbox event — same transaction
         OutboxEvent outbox = OutboxEvent.builder()
@@ -214,7 +220,8 @@ public class WalletService {
                 .walletId(wallet.getId())
                 .build();
 
-        Objects.requireNonNull(outboxRepository.save(outbox), "outbox save returned null");
+        //Objects.requireNonNull(outboxRepository.save(outbox), "outbox save returned null");
+        outboxRepository.save(outbox);
 
         log.info("credit successful userId: {} amount: {} balanceAfter: {}",
                 userId, req.getAmount(), balanceAfter);
