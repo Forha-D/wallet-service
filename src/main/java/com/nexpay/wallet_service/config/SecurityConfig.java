@@ -34,6 +34,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // actuator health — public
                 .requestMatchers("/actuator/**").permitAll()
+                 .requestMatchers("/health/**").permitAll() 
                 // all wallet routes — require authentication
                 .anyRequest().authenticated()
             )
