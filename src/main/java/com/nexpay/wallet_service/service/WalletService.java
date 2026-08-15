@@ -245,4 +245,28 @@ public class WalletService {
 
         return PageResponse.from(page, TransactionResponse::from);
     }
+
+// ─────────────────────────────────────────
+// WRITE DEBIT FAILED OUTBOX EVENT
+// called when order debit fails
+// ─────────────────────────────────────────
+@Transactional
+public void writeDebitFailedEvent(String orderId, String userId, String reason) {
+
+    OutboxEvent outbox = OutboxEvent.builder()
+            .eventType("wallet.debit.failed")
+            .payload(Map.of(
+                    "order_id", orderId,
+                    "user_id",  userId,
+                    "reason",   reason
+            ))
+            .status(OutboxStatus.PENDING)
+            .walletId(UUID.fromString(userId))
+            .build();
+
+    outboxRepository.save(outbox);
+
+    log.info("wallet.debit.failed outbox event written for orderId: {}", orderId);
+}
+
 }
